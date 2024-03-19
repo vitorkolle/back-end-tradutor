@@ -21,16 +21,23 @@ app.get('/traduzir', cors(), async function(request, response, next){
     const linguagemA = params.linguagemA
     const linguagemT = params.linguagemT
 
-    let traduzirTexto = require('./modulo/traducao.js')
-    let traducao = await traduzirTexto.getTraduzirTexto(id, linguagemA, linguagemT)
-
-    if(traducao){
-        response.status(200)
-        response.json(traducao)
-        console.log(traducao)
+    if(id == '' || linguagemA == '' || linguagemT == ''){
+        response.status(400)
+        response.json('ERRO')
+        console.error('todos os atributos precisam ser preenchidos')
     }else{
-        response.status(404)
-        response.json('ERRO:{ITEM NÃO ENCONTRADO}')
+        let traduzirTexto = require('./modulo/traducao.js')
+        let traducao = await traduzirTexto.getTraduzirTexto(id, linguagemA, linguagemT)
+    
+        if(traducao){
+            response.status(200)
+            response.json(traducao)
+            console.log(traducao)
+        }else{
+            response.status(404)
+            response.json('ERRO:{ITEM NÃO ENCONTRADO}')
+        }
+
     }
 })
 
